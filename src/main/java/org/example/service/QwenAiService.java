@@ -36,4 +36,17 @@ public class QwenAiService {
             return DEFAULT_REPLY;
         }
     }
+
+    /**
+     * 检查大模型连接状态
+     */
+    public boolean checkConnection() {
+        try {
+            chatClient.prompt("ping").call().content();
+            return true;
+        } catch (Exception e) {
+            log.warn("[大模型连接检查失败] 异常:{}", e.getMessage());
+            return false;
+        }
+    }
 }

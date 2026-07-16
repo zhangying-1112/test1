@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.bean.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,10 +37,11 @@ class WeChatMessageControllerTest {
     }
 
     @Test
-    @DisplayName("TC-18: 缺少验证参数 - 返回400")
+    @DisplayName("TC-18: 缺少验证参数 - 返回友好提示而非400")
     void verify_missingParams() throws Exception {
         mockMvc.perform(get("/wechat"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk())
+                .andExpect(content().string("微信AI助手服务运行中。请通过微信公众号发送消息进行交互。"));
     }
 
     // ==================== 文本消息处理测试 ====================
@@ -166,5 +168,29 @@ class WeChatMessageControllerTest {
                         .contentType(MediaType.APPLICATION_XML)
                         .content(xmlBody))
                 .andExpect(status().isOk());
+    }
+
+    // ==================== 异常处理测试 ====================
+
+    @Test
+    @DisplayName("TC-24: 消息处理异常 - 返回友好错误提示而非系统异常")
+    void handleMessage_exception() throws Exception {
+        String xmlBody = "<xml>" +
+                "<ToUserName><![CDATA[gh_test]]></ToUserName>" +
+                "<FromUserName><![CDATA[oUser123]]></FromUserName>" +
+                "<CreateTime>1234567890</CreateTime>" +
+                "<MsgType><![CDATA[text]]></MsgType>" +
+                "<Content><![CDATA[测试异常]]></Content>" +
+                "<MsgId>1234567890123456</MsgId>" +
+                "</xml>";
+
+        when(weChatMessageService.handleTextMessage(anyString(), anyString(), anyString()))
+                .thenThrow(new RuntimeException("模拟系统异常"));
+
+        mockMvc.perform(post("/wechat")
+                        .contentType(MediaType.APPLICATION_XML)
+                        .content(xmlBody))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("抱歉，服务器出现异常")));
     }
 }

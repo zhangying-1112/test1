@@ -1,5 +1,6 @@
 package org.example.wechat;
 
+import org.example.command.CommandHandler;
 import org.example.service.QwenAiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,20 +15,36 @@ public class WeChatMessageService {
     private static final String DEFAULT_ERROR_REPLY = "抱歉，AI助手暂时出现故障，请稍后再试！";
 
     private final QwenAiService qwenAiService;
+    private final CommandHandler commandHandler;
 
-    public WeChatMessageService(QwenAiService qwenAiService) {
+    public WeChatMessageService(QwenAiService qwenAiService, CommandHandler commandHandler) {
         this.qwenAiService = qwenAiService;
+        this.commandHandler = commandHandler;
     }
 
     /**
-     * 处理微信用户文本消息，调用AI生成回复
+     * 处理微信用户文本消息
+     * 优先级：固定命令 > AI大模型对话
      */
     public String handleTextMessage(String fromUser, String toUser, String content) {
         log.info("收到微信文本消息 | 用户:{} | 内容:{}", fromUser, content);
 
-        String aiReply = qwenAiService.singleChat(content);
+        // ====== 第一步：优先判断固定命令，命中则直接return，绝不进入AI ======
+        String commandReply = commandHandler.handleCommand(fromUser, content);
+        if (commandReply != null) {
+            log.info("命令命中，直接回复 | 用户:{}", fromUser);
+            return buildTextXmlReply(fromUser, toUser, commandReply);
+        }
 
-        return buildTextXmlReply(fromUser, toUser, aiReply);
+        // ====== 第二步：未命中任何命令，才走AI大模型对话 ======
+        log.info("无命令命中，进入AI对话 | 用户:{} | 内容:{}", fromUser, content);
+        try {
+            String aiReply = qwenAiService.singleChat(content);
+            return buildTextXmlReply(fromUser, toUser, aiReply);
+        } catch (Exception e) {
+            log.error("[AI回复异常] 用户:{} | 内容:{} | 异常:{}", fromUser, content, e.getMessage(), e);
+            return buildTextXmlReply(fromUser, toUser, DEFAULT_ERROR_REPLY);
+        }
     }
 
     /**
@@ -35,7 +52,6 @@ public class WeChatMessageService {
      */
     public String handleNonTextMessage(String fromUser, String toUser, String msgType) {
         log.info("收到非文本消息 | 用户:{} | 类型:{}", fromUser, msgType);
-
         return buildTextXmlReply(fromUser, toUser, DEFAULT_TEXT_REPLY);
     }
 

@@ -7,9 +7,12 @@
     <list default="true" id="88bed540-9fc2-4b7f-82e7-02038de79f31" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.mimocode/.cron-lock" beforeDir="false" afterPath="$PROJECT_DIR$/.mimocode/.cron-lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HelloWorld.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/QwenAiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/QwenAiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/wechat/WeChatMessageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/wechat/WeChatMessageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/wechat/WeChatMessageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/wechat/WeChatMessageService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/wechat/WeChatMessageControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/wechat/WeChatMessageControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/wechat/WeChatMessageServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/wechat/WeChatMessageServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +40,7 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;onboarding.tips.debug.path&quot;: &quot;D:/project1/src/main/java/org/example/Main.java&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
     &quot;应用程序.Application.executor&quot;: &quot;Run&quot;,
     &quot;应用程序.HelloWorld.executor&quot;: &quot;Run&quot;
   }
